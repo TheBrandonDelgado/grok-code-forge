@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Github, Mail, Lock, Eye, EyeOff, Code, Sparkles, Shield } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, Code, Sparkles, Shield } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import type { AuthMode } from '../types';
 
@@ -11,7 +11,7 @@ const Auth: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const { signIn, signUp, signInWithGitHub } = useAuth();
+  const { signIn, signUp } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,22 +33,6 @@ const Auth: React.FC = () => {
     }
   };
 
-  const handleGitHubSignIn = async () => {
-    setLoading(true);
-    setError('');
-
-    try {
-      const { error } = await signInWithGitHub();
-      if (error) {
-        setError(error.message);
-      }
-    } catch (err) {
-      setError('An unexpected error occurred');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const toggleMode = () => {
     setMode(mode === 'login' ? 'signup' : 'login');
     setError('');
@@ -57,10 +41,20 @@ const Auth: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[var(--bg-primary)] bg-pattern py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
+        {/* App Title */}
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-[var(--text-primary)] mb-2">
+            Grok Code Forge
+          </h1>
+          <p className="text-lg text-[var(--text-secondary)] mb-6">
+            AI-Powered Code Generation & Review
+          </p>
+        </div>
+
         {/* Header */}
         <div className="text-center">
           <div className="mx-auto mb-6">
-            <div className="h-16 w-16 bg-[var(--accent-primary)] rounded-xl flex items-center justify-center shadow-sm">
+            <div className="h-16 w-16 bg-[var(--accent-primary)] rounded-xl flex items-center justify-center shadow-sm mx-auto">
               <Code className="h-8 w-8 text-white" />
             </div>
           </div>
@@ -102,12 +96,9 @@ const Auth: React.FC = () => {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-3 py-2 pl-10 border border-[var(--border-primary)] rounded-lg bg-[var(--bg-primary)] text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)]/20 focus:border-[var(--accent-primary)] transition-all duration-200"
+                    className="w-full px-3 py-2 border border-[var(--border-primary)] rounded-lg bg-[var(--bg-primary)] text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)]/20 focus:border-[var(--accent-primary)] transition-all duration-200"
                     placeholder="Enter your email"
                   />
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Mail className="h-4 w-4 text-[var(--text-tertiary)]" />
-                  </div>
                 </div>
               </div>
 
@@ -178,26 +169,6 @@ const Auth: React.FC = () => {
                 )}
               </button>
 
-              {/* Divider */}
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-[var(--border-secondary)]" />
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-3 bg-[var(--bg-card)] text-[var(--text-tertiary)]">Or continue with</span>
-                </div>
-              </div>
-
-              {/* GitHub Button */}
-              <button
-                type="button"
-                onClick={handleGitHubSignIn}
-                disabled={loading}
-                className="w-full flex justify-center items-center py-2.5 px-4 border border-[var(--border-primary)] rounded-lg text-sm font-medium text-[var(--text-primary)] bg-[var(--bg-primary)] hover:bg-[var(--bg-overlay)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--accent-primary)] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-sm hover:shadow-md"
-              >
-                <Github className="mr-2 h-4 w-4" />
-                Continue with GitHub
-              </button>
             </div>
           </form>
         </div>
